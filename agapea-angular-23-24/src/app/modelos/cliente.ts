@@ -9,7 +9,7 @@ export interface ICliente {
     direcciones?: IDireccion[];
     pedidos?:     IPedido[];
     genero?:     string;
-    fechaNacimiento:    Date;
+    fechaNacimiento?:    Date;
     descripcion?:   string;
 }
 

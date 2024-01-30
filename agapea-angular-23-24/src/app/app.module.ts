@@ -36,6 +36,9 @@ import { PanelTiendaComponent } from './componentes/zonaTienda/panelTiendaCompon
 import { LibrosComponent } from './componentes/zonaTienda/librosComponent/libros.component';
 import { DetalleslibroComponent } from './componentes/zonaTienda/mostrarDetallesLibroComponent/detalleslibro.component';
 import { MinilibroComponent } from './componentes/zonaTienda/minilibroComponent/minilibro.component';
+import { MI_TOKEN_SERVICIOSTORAGE } from './servicios/injectiontokenstorageservices';
+import { SubjectstorageService } from './servicios/subjectstorage.service';
+import { LocalstorageService } from './servicios/localstorage.service';
 
 
 @NgModule({
@@ -61,7 +64,9 @@ import { MinilibroComponent } from './componentes/zonaTienda/minilibroComponent/
     AppRoutingModule
   ],
   providers: [
-    RestnodeService //{ provide: RestnodeService, useClass: RestnodeService}
+    RestnodeService, //{ provide: RestnodeService, useClass: RestnodeService}
+    {provide: MI_TOKEN_SERVICIOSTORAGE, useClass: SubjectstorageService},
+    {provide: MI_TOKEN_SERVICIOSTORAGE, useClass: LocalstorageService}
   ], //<-------- array para definir inyeccion de dependencias de servicios usados por componentes
   bootstrap: [AppComponent]
 })
