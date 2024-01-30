@@ -1,8 +1,13 @@
-  {
-  "apiKey": "AIzaSyDFsuU2i1us1Nfpv8gT5-lbEuq1HTpHYPU",
-  "authDomain": "ageapeaclase.firebaseapp.com",
-  "projectId": "ageapeaclase",
-  "storageBucket": "ageapeaclase.appspot.com",
-  "messagingSenderId": "168702402965",
-  "appId": "1:168702402965:web:b93cafaf2567d53fe7d69c"
-  }
+{
+  "type": "service_account",
+  "project_id": "ageapeaclase",
+  "private_key_id": "b54e7b3147a4a4d9c0a24ec2652290370e4e93d9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCw0KN+n9YTv8oG\n6qnA/xvB8tdTG5yDAfhlf1OFLHet3hFGwYh32H1PuN664EJSGSGcF4Hsn2hDpVsU\neKjKtz7pCq9bnLcwZerVb+mRqjJOl5GFhvDoJ236eUNi6tFbKTD48dD3TOJj70eh\nz4IISRMrmRsyGSjLg6lTKkzJ4V0wXUXS8tk6mi9uCjaR+ZCafY8OreTr1C1pEKgA\n7+QFoNbNW0cryKuf/0z5f5Fgm6sg0ZwtVfiHTpjngUfI9tyKBpP5VUMof7KPqfw4\ngGaXQN4fLlqzBYe0cw1EHc89wb5m6Z6HTL0cGPCyju6s7C/TT0lOSjuIC+KtR/OA\ne9DurxRxAgMBAAECggEAHGGmbL6L/BLkAzo1p2S2TZUvr7JrQV2BRAwtGYpVZ5OR\nYwcmYv5dbFI4xkxrDjHkguFZxI6jNisxCdctrjm9ymXMV2s6EyBjkoEVP9bO88NB\nOOq7zrf4NPq0BgkP3o8nwj376fDtwgF4QRFFm74xv+TNSGcLdPzG+DIpA0VpJ52n\ndmMWYqlBA/43ZzV6WLxj/U+ss5gcJ90EhxsL2AhYdNBPCQmqvasSkVTMf3hMjwZO\ndNjjxE3z+6uOwwaRPO0fyjxUTu3ouDYFwfEqEIMIbl4phJCj16HS/XAuGncFNYoF\nQDIm0ZoRqI+x/G1Yx0R0z9kCLe8NR8kbzMmGwx5UZQKBgQDgG0HR0fARtiktXUtQ\ncwtl++0kT3OlredH93d79Q2IghMlU/I1Q+20TuJu0mca7ceEiQ3t1cAbz2vLWYTr\nv+UEPpVsTwDUSX6/xWej4VpGXOaZnnARQxUaT4ho7pHIQeTQ/wRrCSuEOuqwSOaG\nGInwPD1qwFSFGUaJyXPGdf11MwKBgQDJ+nAsL4q9S6dsq5o3mVusUjg7Cy48LbQ5\nJ3hRiVCXNxbQ8aP2tmPT9C3HzWavcjvKKYqmIpXCB3Uz6v7xATOLSJjr/7R2mjzW\n6DVjDluCakb6b/m9I3pCoZJN0gLkaB88dsR4oI3Nvq0QaxArvyMu5eTS4et6hFDi\n2dKzXAZHywKBgQCbU2kAMyDQNdA+Z+4eWU5qJf0L8KF4EJs/bw56dLMnjPgWJCO4\ntVcYZKBeLShXKrzhaFimIkNfQxk0PNx6xWrG0VWhVvR9Ll9SLVES7csy/4q4qG6G\nGFeU/9DM4aVbBgjAri/yu81Ufb1R54UXJgTc4/OxfJJYGdehAmZjBD5irwKBgQDE\nmB2DBKt4YSEPp2AuaflPG6Bb6CAStzHKx95XDt8AsMBmlC1SQGmerve4mPcwInKL\n7i9kUhmOiI/N/xgzIUY4dmtSmsve/XXmgJMmXZ04rZV0wnVFYjjojjfHw3jJNYfh\n5ICMIUqlTslJR8yvqBXo2iAGG5yG3i+U/wwVRKdgTQKBgFwe5c+eMvwTuHEnIQXd\ndSi539XROSQ9exB9IPmBS/c304Hc8FT1gdpkOlGULaQg36NT2WFPlM+Yrc0KLIf5\nCZln8q/5FDcXAtVZ+PKc8lSnkrjAAQ6h2wRq38J7uHJ0HfLlFWls5TvEhjggklU0\nVSL4IkZdsgBD9kV/CXMb8Xb3\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-h9jmw@ageapeaclase.iam.gserviceaccount.com",
+  "client_id": "105219537321552757098",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-h9jmw%40ageapeaclase.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

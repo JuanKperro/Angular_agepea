@@ -61,7 +61,8 @@ import { MinilibroComponent } from './componentes/zonaTienda/minilibroComponent/
     AppRoutingModule
   ],
   providers: [
-    RestnodeService //{ provide: RestnodeService, useClass: RestnodeService}
+    RestnodeService, //{ provide: RestnodeService, useClass: RestnodeService}
+    
   ], //<-------- array para definir inyeccion de dependencias de servicios usados por componentes
   bootstrap: [AppComponent]
 })
