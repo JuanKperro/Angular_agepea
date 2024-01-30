@@ -10,14 +10,14 @@ import { ILibro } from '../modelos/libro';
 })
 export class SubjectstorageService implements IStorageService {
 
-  private _clienteSubject$:BehaviorSubject<ICliente> = new BehaviorSubject<ICliente>({nombre:'',apellidos:'', telefono:'', cuenta: { email:'', cuentaActvia:false }});
+  private _clienteSubject$:BehaviorSubject<ICliente> = new BehaviorSubject<ICliente>({nombre:'',apellidos:'', telefono:'', cuenta: { email:''}});
   private _jwtSubject$:BehaviorSubject<string> = new BehaviorSubject<string>('');
-  private _elementosPedidoSubject$:BehaviorSubject<ILibro[]> = new BehaviorSubject<ILibro[]>([]);
+  private _elementosPedidoSubject$:BehaviorSubject<{ libroElemento: ILibro, cantidadElemento:number}[]> = new BehaviorSubject<{ libroElemento: ILibro, cantidadElemento:number}[]>([]);
 
   constructor() { }
 
       AlmacenarDatosCliente(datoscliente:ICliente):void {
-    this._clienteSubject$.next(datoscliente);
+      this._clienteSubject$.next(datoscliente);
       }
     AlmacenarJWT(jwt:string):void {
     this._jwtSubject$.next(jwt);

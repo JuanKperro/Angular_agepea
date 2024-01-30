@@ -64,7 +64,9 @@ import { LocalstorageService } from './servicios/localstorage.service';
     AppRoutingModule
   ],
   providers: [
-    RestnodeService //{ provide: RestnodeService, useClass: RestnodeService}
+    RestnodeService, //{ provide: RestnodeService, useClass: RestnodeService}
+    { provide: MI_TOKEN_SERVICIOSTORAGE, useClass: SubjectstorageService },
+
   ], //<-------- array para definir inyeccion de dependencias de servicios usados por componentes
   bootstrap: [AppComponent]
 })
