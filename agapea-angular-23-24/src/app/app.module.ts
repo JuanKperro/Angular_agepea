@@ -39,6 +39,8 @@ import { MinilibroComponent } from './componentes/zonaTienda/minilibroComponent/
 import { MI_TOKEN_SERVICIOSTORAGE } from './servicios/injectiontokenstorageservices';
 import { SubjectstorageService } from './servicios/subjectstorage.service';
 import { LocalstorageService } from './servicios/localstorage.service';
+import { MostrarpedidoComponent } from './componentes/zonaTienda/pedidoComponent/mostrarpedido.component';
+import { MinielementopedidoComponent } from './componentes/zonaTienda/miniElementoPedidoComponent/minielementopedido.component';
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import { LocalstorageService } from './servicios/localstorage.service';
     LibrosComponent,
     DetalleslibroComponent,
     RedondeocantidadPipe,
-    MinilibroComponent
+    MinilibroComponent,
+    MostrarpedidoComponent,
+    MinielementopedidoComponent
   ],
   imports: [ //<------------ array con modulos secundiarios q tu aplicacion va a usar
     BrowserModule,

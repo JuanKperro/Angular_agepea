@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { IStorageService } from '../modelos/interfaceservicios';
 import { ICliente } from '../modelos/cliente';
 import {Observable, of} from 'rxjs';
+import { ILibro } from '../modelos/libro';
 
 
 @Injectable({
@@ -10,6 +11,12 @@ import {Observable, of} from 'rxjs';
 export class LocalstorageService implements IStorageService {
 
   constructor() { }
+  OperarElementosPedido(libro: ILibro, cantidad: number, operacion: string): void {
+    throw new Error('Method not implemented.');
+  }
+  RecuperarElementosPedido(): Observable<{ libroElemento: ILibro; cantidadElemento: number; }[]> {
+    throw new Error('Method not implemented.');
+  }
   AlmacenarDatosCliente(datoscliente: ICliente): void {
     localStorage.setItem('datoscliente', JSON.stringify(datoscliente));
     

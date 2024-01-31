@@ -5,7 +5,7 @@ const {initializeApp}=require('firebase/app');
 const app=initializeApp(JSON.parse(process.env.FIREBASE_CONFIG)); 
 
 //------------ CONFIGURACION ACCESO:  FIREBASE-AUTHENTICATION -------------
-const  {getAuth }=require('firebase/auth');
+const  { getAuth }=require('firebase/auth');
 
 const auth=getAuth(app); //<--- servicio de acceso a firebase-authentication
 
@@ -25,7 +25,7 @@ module.exports={
             let _snapshotibros=await getDocs(query(collection(db,'libros'),orderBy('IdCategoria'),startAt(_idcat)));
             let _libros=[];
             _snapshotibros.forEach( snaplibro=> _libros.push(snaplibro.data()));
-
+            
             res.status(200).send(_libros);
                 
         } catch (error) {
