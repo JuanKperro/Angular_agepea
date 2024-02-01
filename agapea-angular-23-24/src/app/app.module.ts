@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 //HttpClientModule: modulo encargado de dar inyeccion de servicios comumes para hacer pet.HTTP externas
 //usando servicio HttpClient....tb permite definicion INTERCEPTORS
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 //ReactiveFormsModule: modulo donde se definen directivas a usar en vistas de componentes para mapear objetos FormGroup y FormControl
 //contra elemenos del dom (directivas formGroup y formControlName)
@@ -76,7 +76,7 @@ import { DatospagoComponent } from './componentes/zonaTienda/datosPagoComponent/
   providers: [
     RestnodeService, //{ provide: RestnodeService, useClass: RestnodeService}
     { provide: MI_TOKEN_SERVICIOSTORAGE, useClass: SubjectstorageService },
-
+    { provide: HTTP_INTERCEPTORS, useClass: AuthjwtInterceptor, multi: true }
   ], //<-------- array para definir inyeccion de dependencias de servicios usados por componentes
   bootstrap: [AppComponent]
 })
