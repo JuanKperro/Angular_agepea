@@ -41,6 +41,9 @@ import { SubjectstorageService } from './servicios/subjectstorage.service';
 import { LocalstorageService } from './servicios/localstorage.service';
 import { MostrarpedidoComponent } from './componentes/zonaTienda/pedidoComponent/mostrarpedido.component';
 import { MinielementopedidoComponent } from './componentes/zonaTienda/miniElementoPedidoComponent/minielementopedido.component';
+import { DatosenvioComponent } from './componentes/zonaTienda/datosEnvioComponent/datosenvio.component';
+import { DatosfacturacionComponent } from './componentes/zonaTienda/datosFacturacionComponent/datosfacturacion.component';
+import { DatospagoComponent } from './componentes/zonaTienda/datosPagoComponent/datospago.component';
 
 
 @NgModule({
@@ -58,7 +61,10 @@ import { MinielementopedidoComponent } from './componentes/zonaTienda/miniElemen
     RedondeocantidadPipe,
     MinilibroComponent,
     MostrarpedidoComponent,
-    MinielementopedidoComponent
+    MinielementopedidoComponent,
+    DatosenvioComponent,
+    DatosfacturacionComponent,
+    DatospagoComponent
   ],
   imports: [ //<------------ array con modulos secundiarios q tu aplicacion va a usar
     BrowserModule,

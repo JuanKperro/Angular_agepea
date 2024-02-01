@@ -4,6 +4,8 @@ import { Observable, lastValueFrom } from 'rxjs';
 import { IRestMessage } from '../modelos/restmessage';
 import { ILibro } from '../modelos/libro';
 import { ICategoria } from '../modelos/categoria';
+import { IMunicipio } from '../modelos/municipio';
+import { IProvincia } from '../modelos/provincia';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +57,13 @@ export class RestnodeService {
         return this._httpclient.get<ILibro>(`http://localhost:3000/api/Tienda/RecuperarUnLibro?isbn=${isbn}`);
     }
 
+        public RecuperarProvincias():Observable<IProvincia[]>{
+        return this._httpclient.get<IProvincia[]>('http://localhost:3000/api/Tienda/RecuperarProvincias');
+    }
+
+    public RecuperarMunicipios(codpro:string):Observable<IMunicipio[]>{
+      return this._httpclient.get<IMunicipio[]>(`http://localhost:3000/api/Tienda/RecuperarMunicipios?codpro=${codpro}`);
+  }
   //#endregion
 
 }
