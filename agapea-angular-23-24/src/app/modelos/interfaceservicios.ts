@@ -5,7 +5,7 @@ export interface IStorageService {
     //#region metodos sincornos para servicios localstorageservice,.. subjectstorageservice
     AlmacenarDatosCliente(datoscliente:ICliente):void;
     AlmacenarJWT(jwt:string):void;
-    RecuperarDatosCliente():Observable<ICliente>;
+    RecuperarDatosCliente():Observable<ICliente | null>;
     RecuperarJWT():Observable<string>;
 
 

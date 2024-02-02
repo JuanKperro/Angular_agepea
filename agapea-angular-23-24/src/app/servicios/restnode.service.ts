@@ -6,6 +6,7 @@ import { ILibro } from '../modelos/libro';
 import { ICategoria } from '../modelos/categoria';
 import { IMunicipio } from '../modelos/municipio';
 import { IProvincia } from '../modelos/provincia';
+import { ICliente } from '../modelos/cliente';
 
 @Injectable({
   providedIn: 'root'
@@ -16,22 +17,19 @@ export class RestnodeService {
 
 
   //#region ------ metodos para zona Cliente ----------
-  public LoginCliente(credenciales:{email:string, password:string}):Promise<IRestMessage>{
-    //¿¿como cojones hago para mandar objeto "credenciales" q me pasa el componente login.component.ts
-    //a nodejs usando el servicio HttpClient de angular??
-        return lastValueFrom(
-                    this._httpclient.post<IRestMessage>(
-                              'http://localhost:3000/api/Cliente/Login',
-                              credenciales,
-                              { 
-                                headers: new HttpHeaders({'Content-Type': 'application/json'})
-                              }
-                              )
-        );
-
+public async LoginCliente(credenciales: {
+    email: string;
+    password: string;
+  }): Promise<IRestMessage> {
+    return lastValueFrom(
+      this._httpclient.post<IRestMessage>('http://localhost:3000/api/Cliente/Login',
+        credenciales,
+        { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+      )
+    );
   }
 
-  public ComprobarEmail(email:string):Observable<IRestMessage>{
+  public  ComprobarEmail(email:string):Observable<IRestMessage>{
     return this._httpclient.get(`http://localhost:3000/api/Cliente/ComprobarEmail?email=${email}`) as Observable<IRestMessage>;
   }
 
@@ -64,6 +62,17 @@ export class RestnodeService {
     public RecuperarMunicipios(codpro:string):Observable<IMunicipio[]>{
       return this._httpclient.get<IMunicipio[]>(`http://localhost:3000/api/Tienda/RecuperarMunicipios?codpro=${codpro}`);
   }
+   public RegistrarCliente(item: [cliente: ICliente, password:string] ):Observable<IRestMessage>{
+    return this._httpclient.post<IRestMessage>(
+      'http://localhost:3000/api/Cliente/RegistrarCliente',
+      {body: {cliente: item[0] ,password: item[1]}},
+      { 
+        headers: new HttpHeaders({'Content-Type': 'application/json'})
+      }
+      ); 
+    }
+
+
   //#endregion
 
 }

@@ -89,9 +89,13 @@ export class RegistrookComponent implements OnInit,OnDestroy{
                                                 this.router.navigateByUrl('/Cliente/Login');
                                             } else {
                                               //mostrar mensajes de error en vista (fallo activacion)
+
                                             } 
                               });
       
+  }
+  navegarLogin(){
+    this.router.navigateByUrl('/Cliente/Login');
   }
 
 }

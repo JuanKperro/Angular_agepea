@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import { Observable , switchMap, concatMap} from 'rxjs';
+import { Observable , switchMap, concatMap, first} from 'rxjs';
 import { MI_TOKEN_SERVICIOSTORAGE } from '../servicios/injectiontokenstorageservices';
 import { IStorageService } from '../modelos/interfaceservicios';
 
@@ -16,8 +16,10 @@ export class AuthjwtInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return this.storageSvc.RecuperarJWT().pipe(
+      first(),
       concatMap(
       (jwt:string) => {
+        console.log('ejecutando interceptor...');
         if (jwt != null || jwt != ''){
           let _reqclonada= request.clone(
           {setHeaders: {Authorization: `Bearer ${jwt}`}}

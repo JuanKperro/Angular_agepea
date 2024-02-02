@@ -44,6 +44,7 @@ import { MinielementopedidoComponent } from './componentes/zonaTienda/miniElemen
 import { DatosenvioComponent } from './componentes/zonaTienda/datosEnvioComponent/datosenvio.component';
 import { DatosfacturacionComponent } from './componentes/zonaTienda/datosFacturacionComponent/datosfacturacion.component';
 import { DatospagoComponent } from './componentes/zonaTienda/datosPagoComponent/datospago.component';
+import { AuthjwtInterceptor } from './servicios_INTERCEPTORS/authjwt.interceptor';
 
 
 @NgModule({
@@ -75,8 +76,8 @@ import { DatospagoComponent } from './componentes/zonaTienda/datosPagoComponent/
   ],
   providers: [
     RestnodeService, //{ provide: RestnodeService, useClass: RestnodeService}
-    { provide: MI_TOKEN_SERVICIOSTORAGE, useClass: SubjectstorageService },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthjwtInterceptor, multi: true }
+    { provide: MI_TOKEN_SERVICIOSTORAGE, useClass: SubjectstorageService }
+    ,{ provide: HTTP_INTERCEPTORS, useClass: AuthjwtInterceptor, multi: true }
   ], //<-------- array para definir inyeccion de dependencias de servicios usados por componentes
   bootstrap: [AppComponent]
 })

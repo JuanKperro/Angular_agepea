@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router, RouterEvent, UrlSegment } from '@angular/router';
 import { Observable, filter, map, tap } from 'rxjs';
+import { MI_TOKEN_SERVICIOSTORAGE } from './servicios/injectiontokenstorageservices';
+import { IStorageService } from './modelos/interfaceservicios';
+import { ICliente } from './modelos/cliente';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +14,13 @@ export class AppComponent {
   
   //public showPanel:string=''; //<----- 'panelCliente' si en url: /Cliente/Panel/...., 'panelTienda' si en url: /Tienda/..., '' si en url /Cliente/Login o Registro
   public routerEvent$:Observable<RouterEvent>;
+  public _clienteLoggedSubject!: Observable<ICliente | null> ;
   public patron:RegExp=new RegExp("(/Cliente/(Login|Registro)|/Tienda/MostrarPedido)","g"); //<--- la opcion "g" o "global" del metodo .match, lo q hace es q si cumple el patron la cadena, no extrae los segmentos del match, solo la cadena entera encontrada
 
 
-  constructor(private router:Router) {
+  constructor(@Inject(MI_TOKEN_SERVICIOSTORAGE) private storageSvc: IStorageService  , private router:Router) {
 
+    this._clienteLoggedSubject=storageSvc.RecuperarDatosCliente();
     this.routerEvent$=router
                           .events
                           .pipe(

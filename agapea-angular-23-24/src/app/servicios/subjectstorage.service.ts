@@ -10,7 +10,7 @@ import { ILibro } from '../modelos/libro';
 })
 export class SubjectstorageService implements IStorageService {
 
-  private _clienteSubject$:BehaviorSubject<ICliente> = new BehaviorSubject<ICliente>({nombre:'',apellidos:'', telefono:'', cuenta: { email:''}});
+  private _clienteSubject$:BehaviorSubject<ICliente | null> = new BehaviorSubject<ICliente | null>(null);
   private _jwtSubject$:BehaviorSubject<string> = new BehaviorSubject<string>('');
   private _elementosPedidoSubject$:BehaviorSubject<{ libroElemento: ILibro, cantidadElemento:number}[]> = new BehaviorSubject<{ libroElemento: ILibro, cantidadElemento:number}[]>([]);
 
@@ -59,7 +59,7 @@ private _elementosPedido: { libroElemento: ILibro, cantidadElemento:number}[] = 
     AlmacenarJWT(jwt:string):void {
     this._jwtSubject$.next(jwt);
     }
-    RecuperarDatosCliente():Observable<ICliente>{
+    RecuperarDatosCliente():Observable<ICliente | null>{
       return this._clienteSubject$.asObservable();
     }
     RecuperarJWT():Observable<string>{

@@ -25,7 +25,7 @@ export class LocalstorageService implements IStorageService {
     localStorage.setItem('jwt', jwt);
     
   }
-  RecuperarDatosCliente(): Observable<ICliente> {
+  RecuperarDatosCliente(): Observable<ICliente | null> {
     let _datoscliente:ICliente = (JSON.parse(localStorage.getItem('datoscliente')!)) as ICliente;
     return of(_datoscliente);
   }
