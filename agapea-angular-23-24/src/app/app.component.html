@@ -120,7 +120,12 @@
                       class="text-end"
                       id="precioCarrito"
                       style="width: 110px; font-size: 1.5em"
-                      ><strong>0,00 €</strong></span
+                      ><strong
+                        >{{
+                          (this.SubtotalPedido$ | async)?.toFixed(2)
+                        }}
+                        €</strong
+                      ></span
                     ></span
                   >
 

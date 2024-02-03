@@ -26,7 +26,7 @@ const routes: Routes = [
     children:[
       { path: 'Libros/:idcat?', component: LibrosComponent },
       { path: 'MostrarLibro/:isbn', component: DetalleslibroComponent },
-      { path: 'MostrarPedido', component: MostrarpedidoComponent, canActivateChild:[ AccesoPedidoGuard ]}
+      { path: 'MostrarPedido', component: MostrarpedidoComponent, canActivate:[ AccesoPedidoGuard ]}
     ]
   },
   { path: '', redirectTo: '/Tienda/Libros/2-10', pathMatch:'full' }

@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MI_TOKEN_SERVICIOSTORAGE } from '../../../servicios/injectiontokenstorageservices';
 import { IStorageService } from '../../../modelos/interfaceservicios';
 import { ILibro } from '../../../modelos/libro';
-import { Observable } from 'rxjs';
+import { Observable , map, tap } from 'rxjs';
 import { IProvincia } from '../../../modelos/provincia';
 import { RestnodeService } from '../../../servicios/restnode.service';
 
@@ -15,6 +15,8 @@ export class MostrarpedidoComponent {
 
   public listaItems$!:Observable<{libroElemento:ILibro, cantidadElemento:number}[]>;
   public listaProvincias$!:Observable<IProvincia[]>;
+  public subtotalPedido$! : Observable<number> ;
+  public gastosEnvio: number = 0;
   public showcompdatosfacturacion: boolean = false;
   public datospago: any = {};
   
@@ -23,11 +25,24 @@ export class MostrarpedidoComponent {
    private restSvc:RestnodeService){
       this.listaItems$=storageSvc.RecuperarElementosPedido();
       this.listaProvincias$=restSvc.RecuperarProvincias();
+      this.subtotalPedido$= this.listaItems$.pipe(
+        
+        map( (item)=> item.reduce(
+        
+           (acumulador, item) =>
+            acumulador + item.libroElemento.Precio * item.cantidadElemento, 0)
+        )
+      );
+   
       
    }
 
       ShowCompDatosFacturacion(valor:boolean){
     this.showcompdatosfacturacion=valor;
+   }
+
+   ActualizarGastosEnvio(importe:number){
+      this.gastosEnvio=importe;
    }
 
 

@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
  // carga un componente u otro
 import { AppRoutingModule } from './app-routing.module';
 
+
 //HttpClientModule: modulo encargado de dar inyeccion de servicios comumes para hacer pet.HTTP externas
 //usando servicio HttpClient....tb permite definicion INTERCEPTORS
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -45,6 +46,7 @@ import { DatosenvioComponent } from './componentes/zonaTienda/datosEnvioComponen
 import { DatosfacturacionComponent } from './componentes/zonaTienda/datosFacturacionComponent/datosfacturacion.component';
 import { DatospagoComponent } from './componentes/zonaTienda/datosPagoComponent/datospago.component';
 import { AuthjwtInterceptor } from './servicios_INTERCEPTORS/authjwt.interceptor';
+import { AccesoPedidoGuard } from './servicios_guards/acceso-pedido.guard';
 
 
 @NgModule({
@@ -77,7 +79,8 @@ import { AuthjwtInterceptor } from './servicios_INTERCEPTORS/authjwt.interceptor
   providers: [
     RestnodeService, //{ provide: RestnodeService, useClass: RestnodeService}
     { provide: MI_TOKEN_SERVICIOSTORAGE, useClass: SubjectstorageService }
-    ,{ provide: HTTP_INTERCEPTORS, useClass: AuthjwtInterceptor, multi: true }
+    ,{ provide: HTTP_INTERCEPTORS, useClass: AuthjwtInterceptor, multi: true },
+    AccesoPedidoGuard
   ], //<-------- array para definir inyeccion de dependencias de servicios usados por componentes
   bootstrap: [AppComponent]
 })

@@ -21,6 +21,7 @@ module.exports = {
 
             let _provs = [];
             _snapProvs.forEach(snapProv => _provs.push(snapProv.data()));
+
             res.status(200).send(_provs);
 
         } catch (error) {
