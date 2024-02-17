@@ -4,6 +4,7 @@ const { initializeApp } = require('firebase/app');
 //no meter el json aqui en fichero de codigo fuente como dice la doc...
 const app = initializeApp(JSON.parse(process.env.FIREBASE_CONFIG));
 
+const axios = require('axios');
 //------------ CONFIGURACION ACCESO:  FIREBASE-AUTHENTICATION -------------
 const { getAuth } = require('firebase/auth');
 

@@ -20,7 +20,7 @@ export class AppComponent {
   public SubtotalPedido$!:Observable<number>;
   public _clienteLoggedSubject!: Observable<ICliente | null> ;
   public patron:RegExp=new RegExp("(/Cliente/(Login|Registro)|/Tienda/MostrarPedido)","g"); //<--- la opcion "g" o "global" del metodo .match, lo q hace es q si cumple el patron la cadena, no extrae los segmentos del match, solo la cadena entera encontrada
-
+  public patronPaneles:RegExp=new RegExp("(/Cliente/Panel/*)", "g");
 
   constructor(@Inject(MI_TOKEN_SERVICIOSTORAGE) private storageSvc: IStorageService  , private router:Router) {
 

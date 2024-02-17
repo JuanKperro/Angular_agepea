@@ -6,12 +6,15 @@ const { initializeApp } = require('firebase/app');
 const app = initializeApp(JSON.parse(process.env.FIREBASE_CONFIG));
 
 //------------ CONFIGURACION ACCESO:  FIREBASE-AUTHENTICATION -------------
-const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, checkActionCode, applyActionCode } = require('firebase/auth');
+const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    sendEmailVerification, checkActionCode, applyActionCode, sendPasswordResetEmail
+    , confirmPasswordReset } = require('firebase/auth');
 
 const auth = getAuth(app); //<--- servicio de acceso a firebase-authentication
 
 //------------ CONFIGURACION ACCESO:  FIREBASE-DATABASE -------------------
-const { getFirestore, getDocs, collection, where, query, addDoc, getDoc, updateDoc, doc } = require('firebase/firestore');
+const { getFirestore, getDocs, collection, where, query, addDoc,
+    getDoc, updateDoc, doc, arrayRemove, arrayUnion } = require('firebase/firestore');
 
 const db = getFirestore(app); //<---- servicio de acceso a todas las colecciones de la BD definida en firebase-database
 
@@ -36,8 +39,8 @@ module.exports = {
             //https://firebase.google.com/docs/firestore/query-data/get-data?hl=es&authuser=0#get_multiple_documents_from_a_collection
             let _clienteSnapShot = await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.email)));
             //console.log('snapshot recuperado de clientes...', _clienteSnapShot);
-
             let _datoscliente = _clienteSnapShot.docs.shift().data();
+
             console.log('datos del clietne recuperados...', _datoscliente);
 
             res.status(200).send(
@@ -263,6 +266,53 @@ module.exports = {
             console.log('error subida imagen...', error);
             generaRespuesta(5, 'fallo a la hora de subir imagen al storage', error, null, null, null, res);
 
+        }
+    },
+    updateDatosCliente: async (req, res, next) => {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            if (!token) {
+                throw new Error('no hay token en cabecera');
+            }
+            const idcliente = (await auth.verifyIdToken(token)).uid;
+            const email = (await auth.verifyIdToken(token)).email;
+            let { datoscliente, password } = req.body;
+            const datosactualizados = await updateDoc(doc(db, 'clientes', idcliente), datoscliente);
+            console.log('datos actualizados en firebase...', datosactualizados);
+            //Si la password no esta vacia, enviamos email de cambio de contraseña
+            if (String.length(password) > 0) {
+                const actionCodeSettings = {
+                    url: `http://localhost:4200/Cliente/CambioContraseñaOk?email=${email}&pass=${password}`,
+                    iOS: {
+                        bundleId: 'com.example.ios'
+                    },
+                    android: {
+                        packageName: 'com.example.android',
+                        installApp: true,
+                        minimumVersion: '12'
+                    },
+                    handleCodeInApp: true
+                };
+                await sendPasswordResetEmail(auth, email, actionCodeSettings);
+                generaRespuesta(1, 'Datos cliente actualizados OK!!!', '', token, datosactualizados, null, res);
+
+            }
+            generaRespuesta(0, 'Datos cliente actualizados OK!!!', '', token, datosactualizados, null, res);
+
+        } catch (error) {
+            console.log('error en UpdateDatosCliente...', error);
+            generaRespuesta(5, 'fallo a la hora de actualizar datos', error, null, null, null, res);
+        }
+
+    },
+    confirmarCambioContraseña: async (req, res, next) => {
+        try {
+            const { email, token, pass } = req.query;
+            const resp = await confirmPasswordReset(auth, token, pass);
+            console.log('respuesta de confirmacion cambio contraseña...', resp);
+            generaRespuesta(0, 'Cambio contraseña confirmado OK!!!', '', null, null, null, res);
+        } catch (error) {
+            generaRespuesta(1, 'Cambio contraseña con errores', error.message, null, null, null, res);
         }
     }
 }

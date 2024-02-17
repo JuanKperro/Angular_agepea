@@ -13,5 +13,8 @@ router.post('/Registro', clienteController.registro);
 router.get('/ComprobarEmail', clienteController.comprobarEmail); //<---- en url, hay variable: ?email=....
 router.get('/ActivarCuenta', clienteController.activarCuenta);
 router.post('/RegistrarCliente', clienteController.registro);
+router.post('/UpdateDatosCliente', clienteController.updateDatosCliente);
+router.get('/ConfirmarCambioContraseña', clienteController.confirmarCambioContraseña);
+router.post('/OperarDireccion', clienteController.operarDireccion)
 
 module.exports = router;

@@ -58,6 +58,15 @@ public async LoginCliente(credenciales: {
                                                 )
     );
   }
+
+  public async UpdateDatosCliente (datos: any): Promise<IRestMessage> {
+    return await lastValueFrom(
+      this._httpclient.post<IRestMessage>(
+        'http://localhost:3000/api/Cliente/updateDatosCliente',
+        datos,
+        { headers: new HttpHeaders({'Content-Type':'application/json'}) }
+      ));
+  }
   //#endregion
 
   //#region ------ metodos para zona Tienda -----------
@@ -102,6 +111,14 @@ public async LoginCliente(credenciales: {
                             { headers: new HttpHeaders({'Content-Type':'application/json'}) }
                           )
                     );
+  }
+  public ConfirmarCambioContraseña(email:string, token:string, pass: string):Promise<IRestMessage>{
+    return lastValueFrom(
+      this._httpclient
+          .get<IRestMessage>(
+            `http://localhost:3000/api/Cliente/ConfirmarCambioContraseña?email=${email}&pass=${pass}&token=${token}`
+          )
+    );
   }
 
 

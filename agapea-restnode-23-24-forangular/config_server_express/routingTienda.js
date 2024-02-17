@@ -1,5 +1,6 @@
 const express = require('express');
 
+
 const router = express.Router(); //<----- objeto router a exportar...
 
 const tiendaController = require('../controllers/tiendaController');

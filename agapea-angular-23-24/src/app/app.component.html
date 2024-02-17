@@ -27,7 +27,7 @@
                 </button>
                 } @else {
                 <button
-                  [routerLink]="['/Cliente/PanelCliente']"
+                  [routerLink]="['/Cliente/Panel/InicioPanel']"
                   routerLinkActive="router-link-active"
                   class="btn bg-negro btn-sm p-0"
                 >
@@ -158,9 +158,14 @@
                      -->
     <!-- @if( this.routerEvent$ | async; as routv && ! routv.url.match(this.patron) ) -->
     @if( ! (this.routerEvent$ | async)!.url.match(this.patron) ) {
-    <!-- tengo q mostrar paneles de tienda o panel cliente-->
+    <!-- tengo q mostrar paneles de tienda o panel culiente-->
     <div class="col-3">
+      @if ( (this.routerEvent$ | async)?.url?.match(this.patronPaneles)) {
+      <app-panelcliente></app-panelcliente>
+
+      } @else{
       <app-panel-tienda></app-panel-tienda>
+      }
     </div>
 
     <div class="col-9">

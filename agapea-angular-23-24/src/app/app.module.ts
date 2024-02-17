@@ -43,7 +43,7 @@ import { authjwtv17Interceptor } from './servicios_INTERCEPTORS/authjwtv17.inter
   declarations: [ //<------ array con defs. de componentes, directivas y pipes disponibles para toda la aplicacion
     AppComponent,
     PanelTiendaComponent,
-    PanelclienteComponent
+    PanelclienteComponent,
   ],
   imports: [ //<------------ array con modulos secundiarios q tu aplicacion va a usar
     BrowserModule,

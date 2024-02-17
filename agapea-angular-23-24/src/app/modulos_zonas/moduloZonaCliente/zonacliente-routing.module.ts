@@ -5,6 +5,8 @@ import { LoginComponent} from '../../componentes/zonaCliente/loginComponent/logi
 import { RegistroComponent } from '../../componentes/zonaCliente/registroComponent/registro.component' 
 import { RegistrookComponent } from '../../componentes/zonaCliente/registroOkComponent/registrook.component' 
 import { InicioPanelComponent } from '../../componentes/zonaCliente/inicioPanelComponent/inicio-panel.component';
+import { CambioContraseniaComponent } from '../../componentes/zonaCliente/cambioContraseñaComponent/cambio-contrasenia.component';
+import { CambioContraseniaOkComponent } from '../../componentes/zonaCliente/cambioContraseñaOkComponent/cambio-contrasenia-ok.component';
 
 
 const routes: Routes = [
@@ -16,7 +18,9 @@ const routes: Routes = [
                                       { path: 'RegistroOk', component: RegistrookComponent },
                                       { path: 'Panel', children:[
                                                 { path: 'InicioPanel', component: InicioPanelComponent }
-                                      ]}
+                                      ]},
+                                      { path: 'CambioContraseña', component: CambioContraseniaComponent },
+                                      { path: 'CambioContraseñaOk', component: CambioContraseniaOkComponent}
                             ]  
                         }
 ];

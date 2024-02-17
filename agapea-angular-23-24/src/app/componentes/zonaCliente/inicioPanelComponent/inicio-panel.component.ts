@@ -8,6 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MI_TOKEN_SERVICIOSTORAGE } from '../../../servicios/injectiontokenstorageservices';
 import { ModaldireccionesComponent } from '../modalDireccionesComponent/modaldirecciones.component';
 import { IRestMessage } from '../../../modelos/restmessage';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-inicio-panel',
@@ -46,7 +47,7 @@ export class InicioPanelComponent {
   
   constructor(private renderer2: Renderer2, 
               private restSvc:RestnodeService,
-              @Inject(MI_TOKEN_SERVICIOSTORAGE) private storageSvc:IStorageService) {
+              @Inject(MI_TOKEN_SERVICIOSTORAGE) private storageSvc:IStorageService, private router:Router) {
 
         this.datosClienteStorage$=this.storageSvc.RecuperarDatosCliente() as Observable<ICliente|null>;
         this.direcciones$=this.datosClienteStorage$
@@ -105,7 +106,47 @@ export class InicioPanelComponent {
   }
 
   public async UpdateDatosCliente() {
+
     console.log(this.formdatos);
+    let password = this.formdatos.controls['password'].value;
+    let datoscliente:ICliente={
+      cuenta: {
+        email: this.formdatos.controls['email'].value,
+        login: this.formdatos.controls['login'].value,
+        imagenAvatarBASE64: this.imgSrc
+      },
+      nombre: this.formdatos.controls['nombre'].value,
+      apellidos: this.formdatos.controls['apellidos'].value,
+      telefono: this.formdatos.controls['telefono'].value,
+      genero: this.formdatos.controls['genero'].value,
+      fechaNacimiento: new Date(this.formdatos.controls['anio'].value, this.formdatos.controls['mes'].value, this.formdatos.controls['dia'].value),
+      descripcion: this.formdatos.controls['descripcion'].value
+    };
+    //igualo las direcciones del cliente para hacer el update entero en el back
+    //sino, se borrarian las direcciones al hacer update, o habria que igualar datos uno a uno...
+    if (this.direcciones$){
+      this.direcciones$.subscribe(
+        (direcciones:IDireccion[])=>{
+          datoscliente.direcciones=direcciones;
+        }
+      );
+    }
+    const resp: IRestMessage = await  this.restSvc.UpdateDatosCliente({datoscliente, password})
+    switch (resp.codigo) {
+      case 0:
+        this.storageSvc.AlmacenarDatosCliente(resp.datoscliente!);
+        this.storageSvc.AlmacenarJWT(resp.token!);
+        alert('Datos actualizados correctamente...');
+        break;
+        case 1:
+          alert('Datos actualizados correctamente...');
+        this.router.navigateByUrl('/Cliente/CambioContraseña');
+        break;
+      default:
+        alert(`Error al actualizar datos... ${resp.error}`);
+        break;
+    }
+   
   }  
 
   public PrevisualizarImagen(inputimagen: any) {
@@ -145,8 +186,6 @@ export class InicioPanelComponent {
                         }
                         }
                       );
-
-    
   }
 
 
@@ -182,6 +221,8 @@ export class InicioPanelComponent {
                   //actualziar datos del cliente y token...
                   this.storageSvc.AlmacenarDatosCliente(_resp.datoscliente!);
                   this.storageSvc.AlmacenarJWT(_resp.token!);
+                  //refrescar vista con el nuevo observable de direcciones...
+                  this.direcciones$=of(_resp.datoscliente!.direcciones!);
                   
             } else {
                 //mostrar mensaje de error en vista por fallo de operacion en direcciones....

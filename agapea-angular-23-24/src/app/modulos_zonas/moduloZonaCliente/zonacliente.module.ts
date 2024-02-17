@@ -11,6 +11,8 @@ import { RegistrookComponent } from '../../componentes/zonaCliente/registroOkCom
 import { InicioPanelComponent } from '../../componentes/zonaCliente/inicioPanelComponent/inicio-panel.component';
 import { ModaldireccionesComponent } from '../../componentes/zonaCliente/modalDireccionesComponent/modaldirecciones.component';
 import { MinidireccionComponent } from '../../componentes/zonaCliente/miniDireccionComponent/minidireccion.component';
+import { CambioContraseniaComponent } from '../../componentes/zonaCliente/cambioContraseñaComponent/cambio-contrasenia.component';
+import { CambioContraseniaOkComponent } from '../../componentes/zonaCliente/cambioContraseñaOkComponent/cambio-contrasenia-ok.component';
 
 //-------------------- directivas del modulo princiapal de la aplicacion ---------------------------
 import { EmailfilterdomainDirective } from '../../directivas/emailfilterdomain.directive'
@@ -25,7 +27,9 @@ import { ComprobacionexisteemailDirective } from '../../directivas/comprobacione
     RegistrookComponent,
     InicioPanelComponent,
     ModaldireccionesComponent,
-    MinidireccionComponent
+    MinidireccionComponent,
+    CambioContraseniaComponent,
+    CambioContraseniaOkComponent
   ],
   imports: [
     CommonModule,
