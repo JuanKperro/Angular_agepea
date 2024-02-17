@@ -7,6 +7,7 @@ import { IDireccion } from '../../../modelos/direccion';
 import { IProvincia } from '../../../modelos/provincia';
 import { RestnodeService } from '../../../servicios/restnode.service';
 import { IMunicipio } from '../../../modelos/municipio';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-datosenvio',
@@ -16,6 +17,7 @@ import { IMunicipio } from '../../../modelos/municipio';
 export class DatosenvioComponent implements OnDestroy {
     
     @Input()listaProvincias!:IProvincia[];
+    @Input() datosEnvio!:FormGroup;
     @Output() checkdatosFacturacionEvent:EventEmitter<boolean>=new EventEmitter<boolean>();
     @Output() ActualizarGastosEnvioEvent:EventEmitter<number>=new EventEmitter<number>();
     @ViewChild('selectmunis') selectmunis!:ElementRef;
@@ -25,6 +27,7 @@ export class DatosenvioComponent implements OnDestroy {
     public direccionprincipal:IDireccion | undefined;
     private datosClienteSubscriptor:Subscription;
     public listaMunicipios$!:Observable<IMunicipio[]>;
+    public datosFormReal = new FormGroup({});
     
 
     //----variables de tipo switch para ocultar/mostrar partes de la vista datosenvio-----

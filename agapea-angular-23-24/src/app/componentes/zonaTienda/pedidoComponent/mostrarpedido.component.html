@@ -6,14 +6,17 @@
         [listaProvincias]="(this.listaProvincias$ | async)!"
         (ActualizarGastosEnvioEvent)="this.ActualizarGastosEnvio($event)"
         (checkdatosFacturacionEvent)="this.ShowCompDatosFacturacion($event)"
+        [datosEnvio]="this.datosEnvioForm"
       ></app-datosenvio>
       @if(this.showcompdatosfacturacion) {
       <app-datosfacturacion
+        [datosFacturacionForm]="this.datosFacturacionForm"
         [listaProvincias]="(this.listaProvincias$ | async)!"
       ></app-datosfacturacion>
       }
 
       <app-datospago
+        [datosPago]="this.datosPagoForm"
         [tituloPago]="
           this.showcompdatosfacturacion ? '3. - Datos Pago' : '2. - Datos Pago'
         "
@@ -96,7 +99,7 @@
             </a>
           </div>
           <div>
-            <a class="btn btn-primary">
+            <a class="btn btn-primary" (click)="finalizarPedido()">
               <i class="fa-solid fa-truck"></i> Finalizar Pedido
             </a>
           </div>

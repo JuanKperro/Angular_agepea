@@ -7,7 +7,8 @@ import { ICategoria } from '../modelos/categoria';
 import { IMunicipio } from '../modelos/municipio';
 import { IProvincia } from '../modelos/provincia';
 import { ICliente } from '../modelos/cliente';
-
+import { IDireccion } from '../modelos/direccion';
+import { IPedido } from '../modelos/pedido';
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +36,27 @@ public async LoginCliente(credenciales: {
 
   public ActivarCuenta(mode:string|null, oobCode:string|null, apiKey:string|null):Observable<IRestMessage>{
       return this._httpclient.get(`http://localhost:3000/api/Cliente/ActivarCuenta?mod=${mode}&cod=${oobCode}&key=${apiKey}`) as Observable<IRestMessage>;
+  }
+
+    public async UploadImagen(imagenBASE64:string, email: string): Promise<IRestMessage>  {
+    return await lastValueFrom(
+              this._httpclient.post<IRestMessage>(
+                                                 'http://localhost:3000/api/Cliente/UploadImagen',
+                                                 {imagen: imagenBASE64, emailcliente: email },
+                                                 { headers: new HttpHeaders( {'Content-Type':'application/json'}) }
+                                                 )
+                              );
+  }
+  public async OperarDireccion(direccion:IDireccion, operacion:string, email:string ):  Promise<IRestMessage> {
+    console.log('en servicio, metodo operardireccion, mandando...',{ direccion,operacion,email});
+
+    return await lastValueFrom(
+              this._httpclient.post<IRestMessage>(
+                                                  'http://localhost:3000/api/Cliente/OperarDireccion',
+                                                  { direccion, operacion, email },
+                                                  { headers: new HttpHeaders( {'content-Type':'application/json'} ) }
+                                                )
+    );
   }
   //#endregion
 
@@ -71,6 +93,16 @@ public async LoginCliente(credenciales: {
       }
       ); 
     }
+    public FinalizarPedido( pedido:IPedido, email:string):Promise<IRestMessage>{
+    return lastValueFrom(
+                      this._httpclient
+                          .post<IRestMessage>(
+                            "http://localhost:3000/api/Tienda/FinalizarPedido",
+                            { pedido, email},
+                            { headers: new HttpHeaders({'Content-Type':'application/json'}) }
+                          )
+                    );
+  }
 
 
   //#endregion

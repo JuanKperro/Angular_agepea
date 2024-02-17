@@ -11,6 +11,7 @@ router.get('/RecuperarUnLibro', tiendaController.recuperarUnLibro);
 router.get('/RecuperarCategorias', tiendaController.recuperarCategorias);
 router.get('/RecuperarProvincias', tiendaController.recuperarProvincias);
 router.get('/RecuperarMunicipios', tiendaController.recuperarMunicipios);
+router.post('/FinalizarPedido', tiendaController.finalizarPedido);
 
 
 module.exports = router;

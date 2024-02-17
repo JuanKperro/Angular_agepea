@@ -4,9 +4,10 @@ import { IMunicipio } from "./municipio";
 import { IProvincia } from "./provincia";
 
 export interface IDireccion {
+    idDireccion?:  string;
     calle:         string;
     pais:          string;
-    cp:            number;
+    cp:            string;
     provincia:     IProvincia;
     municipio:     IMunicipio;
     esPrincipal:   boolean;

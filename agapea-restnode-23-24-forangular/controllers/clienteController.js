@@ -15,6 +15,10 @@ const { getFirestore, getDocs, collection, where, query, addDoc, getDoc, updateD
 
 const db = getFirestore(app); //<---- servicio de acceso a todas las colecciones de la BD definida en firebase-database
 
+function generaRespuesta(codigo, mensaje, errores, token, datoscliente, otrosdatos, res) {
+    //if(req.body.refreshtoken) token=req.body.refreshtoken;
+    res.status(200).send({ codigo, mensaje, errores, token, datoscliente, otrosdatos });
+}
 
 
 module.exports = {
@@ -197,5 +201,68 @@ module.exports = {
             );
         }
 
+    },
+    operarDireccion: async (req, res, next) => {
+        console.log(req.body); //{ direccion:..., operacion: ..., email: ...}
+        try {
+            //recupero de la coleccion clientes el documento con ese email, lanzo query:
+            let _refcliente = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.email)))).docs[0];
+            console.log('cliente recuperado de firebase-database...', _refcliente.data());
+
+            switch (req.body.operacion) {
+                case 'borrar':
+                    //tengo elimiinar del array de direcciones del objeto cliente recuperado la direccion q nos pasan: arrayRemove
+                    await updateDoc(_refcliente.ref, { 'direcciones': arrayRemove(req.body.direccion) });
+                    break;
+
+                case 'crear':
+                    //tengo q añadir al array de direcciones del objeto cliente recuperado la nueva direccion:  arrayUnion
+                    await updateDoc(_refcliente.ref, { 'direcciones': arrayUnion(req.body.direccion) });
+                    break;
+
+                case 'fin-modificacion':
+                    //dos posibilidades: accedes a direccion, la recuperas y vas modificandop prop.por prop o eliminas y añades
+                    let _direcciones = _refcliente.data().direcciones;
+                    let _posmodif = _direcciones.findIndex(direc => direc.idDireccion == req.body.direccion.idDireccion);
+                    _direcciones[_posmodif] = req.body.direccion;
+
+                    await updateDoc(_refcliente.ref, { 'direcciones': _direcciones });
+                    break;
+            }
+
+            //OJO!!! si usas la ref.al documento cliente de arriba, es un snapshot...no esta actualizada!!!! a las nuevas
+            //direcciones, tienes q volver a hacer query...esto no vale:
+            //let _clienteActualizado=(await getDoc(doc(db,'clientes',_refcliente.id))).data();
+            let _clienteActualizado = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.email)))).docs[0].data();
+
+            console.log('cliente actualizado mandado en el restmessage....', _clienteActualizado);
+
+            generaRespuesta(0, `${req.body.operacion} sobre direccion realizada OK!!`, null, '', _clienteActualizado, '', res);
+
+        } catch (error) {
+            console.log('error en operar direcciones...', error);
+            generaRespuesta(6, `fallo a la hora de ${req.body.operacion} sobre direccion ${req.body.direccion.calle} al guardar en bd...`, error, null, null, null, res);
+        }
+    },
+    uploadImagen: async (req, res, next) => {
+        try {
+            //tengo q coger la extension del fichero, en req.body.imagen:  data:image/jpeg
+            let _nombrefichero = 'imagen____' + req.body.emailcliente;//  + '.' + req.body.imagen.split(';')[0].split('/')[1]   ;
+            console.log('nombre del fichero a guardar en STORGE...', _nombrefichero);
+            let _result = await uploadString(ref(storage, `imagenes/${_nombrefichero}`), req.body.imagen, 'data_url'); //objeto respuesta subida UploadResult         
+
+            //podrias meter en coleccion clientes de firebase-database en prop. credenciales en prop. imagenAvatar
+            //el nombre del fichero y en imagenAvatarBASE&$ el contenido de la imagen...
+            let _refcliente = await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.emailcliente)));
+            _refcliente.forEach(async (result) => {
+                await updateDoc(result.ref, { 'cuenta.imagenAvatarBASE64': req.body.imagen });
+            });
+
+            generaRespuesta(0, 'Imagen avatar subida OK!!! al storage de firebase', '', null, null, null, res);
+        } catch (error) {
+            console.log('error subida imagen...', error);
+            generaRespuesta(5, 'fallo a la hora de subir imagen al storage', error, null, null, null, res);
+
+        }
     }
 }

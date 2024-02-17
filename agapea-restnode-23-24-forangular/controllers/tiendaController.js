@@ -14,14 +14,19 @@ const { getFirestore, getDocs, collection, where, query, addDoc, getDoc, orderBy
 
 const db = getFirestore(app); //<---- servicio de acceso a todas las colecciones de la BD definida en firebase-database
 
+
+
 module.exports = {
     recuperarProvincias: async (req, res, next) => {
         try {
+            let _resp = await axios.get(`https://apiv1.geoapi.es/provincias?type=JSON&key=${process.env.GEOAPI_KEY}&sandbox=0`);
+            let _provs = _resp.data.data;
+            /*
             let _snapProvs = await getDocs(collection(db, 'provincias'), orderBy('PRO'));
 
             let _provs = [];
             _snapProvs.forEach(snapProv => _provs.push(snapProv.data()));
-
+            */
             res.status(200).send(_provs);
 
         } catch (error) {
@@ -32,12 +37,15 @@ module.exports = {
     recuperarMunicipios: async (req, res, next) => {
         try {
             let _codpro = req.query.codpro;
+            let _resp = await axios.get(`https://apiv1.geoapi.es/municipios?CPRO=${_codpro}&type=JSON&key=${process.env.GEOAPI_KEY}&sandbox=0`);
+            let _munis = _resp.data.data;
+            /*
             console.log('recuperando municipios de provincia...', _codpro);
 
             let _snapMunis = await getDocs(collection(db, 'municipios'), orderBy('DMUN50'), where('CPRO', '==', _codpro));
 
             let _munis = [];
-            _snapMunis.forEach(snapMuni => _munis.push(snapMuni.data()));
+            _snapMunis.forEach(snapMuni => _munis.push(snapMuni.data()));*/
             res.status(200).send(_munis)
 
         } catch (error) {
@@ -99,6 +107,35 @@ module.exports = {
         } catch (error) {
             console.log('error recuperar categorias...', error);
             res.status(200).send([]);
+        }
+    },
+    finalizarPedido: async (req, res, next) => {
+        try {
+            let { pedido, email } = req.body;
+            console.log('datos finalizar pedido...', { email, pedido });
+
+            res.status(200).send(
+                {
+                    codigo: 0,
+                    mensaje: 'Pedido oks...',
+                    error: null,
+                    datoscliente: null,
+                    token: null,
+                    otrosdatos: null
+                }
+            );
+        } catch (error) {
+            console.log('error al finalizar pedido...', error);
+            res.status(200).send(
+                {
+                    codigo: 1,
+                    mensaje: 'Error en pedido...',
+                    error: error.message,
+                    datoscliente: null,
+                    token: null,
+                    otrosdatos: null
+                }
+            );;
         }
     }
 }
