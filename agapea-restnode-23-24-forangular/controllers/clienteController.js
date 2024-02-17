@@ -10,6 +10,13 @@ const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
     sendEmailVerification, checkActionCode, applyActionCode, sendPasswordResetEmail
     , confirmPasswordReset } = require('firebase/auth');
 
+const admin = require('firebase-admin');
+admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(process.env.SERVICE_ACCOUNT)),
+    databaseURL: 'https://agapeaclase.firebaseio.com'
+});
+
+
 const auth = getAuth(app); //<--- servicio de acceso a firebase-authentication
 
 //------------ CONFIGURACION ACCESO:  FIREBASE-DATABASE -------------------
@@ -42,6 +49,7 @@ module.exports = {
             let _datoscliente = _clienteSnapShot.docs.shift().data();
 
             console.log('datos del clietne recuperados...', _datoscliente);
+            console.log(_clienteSnapShot.docs.shift().id);
 
             res.status(200).send(
                 {
@@ -274,8 +282,9 @@ module.exports = {
             if (!token) {
                 throw new Error('no hay token en cabecera');
             }
-            const idcliente = (await auth.verifyIdToken(token)).uid;
-            const email = (await auth.verifyIdToken(token)).email;
+
+            const idcliente = await admin.auth().verifyIdToken(token).uid;
+            const email = (await admin.auth().verifyIdToken(token)).email;
             let { datoscliente, password } = req.body;
             const datosactualizados = await updateDoc(doc(db, 'clientes', idcliente), datoscliente);
             console.log('datos actualizados en firebase...', datosactualizados);
