@@ -13,7 +13,7 @@ const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
 const admin = require('firebase-admin');
 admin.initializeApp({
     credential: admin.credential.cert(JSON.parse(process.env.SERVICE_ACCOUNT)),
-    databaseURL: 'https://agapeaclase.firebaseio.com'
+    databaseURL: 'https://ageapeaclase.firebaseio.com'
 });
 
 
@@ -257,6 +257,14 @@ module.exports = {
     },
     uploadImagen: async (req, res, next) => {
         try {
+            const token = req.headers.authorization.split(' ')[1];
+            if (!token) {
+                throw new Error('no hay token en cabecera');
+            }
+            const tokenprueba = await admin.auth().verifyIdToken(token);
+            if (!tokenprueba) {
+                throw new Error('token no valido');
+            }
             //tengo q coger la extension del fichero, en req.body.imagen:  data:image/jpeg
             let _nombrefichero = 'imagen____' + req.body.emailcliente;//  + '.' + req.body.imagen.split(';')[0].split('/')[1]   ;
             console.log('nombre del fichero a guardar en STORGE...', _nombrefichero);
@@ -282,14 +290,15 @@ module.exports = {
             if (!token) {
                 throw new Error('no hay token en cabecera');
             }
-
-            const idcliente = await admin.auth().verifyIdToken(token).uid;
-            const email = (await admin.auth().verifyIdToken(token)).email;
+            const tokenprueba = await admin.auth().verifyIdToken(token);
+            const idcliente = tokenprueba.uid;
+            const email = tokenprueba.email;
             let { datoscliente, password } = req.body;
-            const datosactualizados = await updateDoc(doc(db, 'clientes', idcliente), datoscliente);
+            let _refcliente = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', email)))).docs[0];
+            const datosactualizados = await updateDoc(_refcliente.ref, datoscliente);
             console.log('datos actualizados en firebase...', datosactualizados);
             //Si la password no esta vacia, enviamos email de cambio de contraseña
-            if (String.length(password) > 0) {
+            if (password.length > 0) {
                 const actionCodeSettings = {
                     url: `http://localhost:4200/Cliente/CambioContraseñaOk?email=${email}&pass=${password}`,
                     iOS: {
