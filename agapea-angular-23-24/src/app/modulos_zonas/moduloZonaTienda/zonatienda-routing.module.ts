@@ -6,6 +6,7 @@ import { LibrosComponent } from '../../componentes/zonaTienda/librosComponent/li
 import { DetalleslibroComponent } from '../../componentes/zonaTienda/mostrarDetallesLibroComponent/detalleslibro.component';
 import { AccesoPedidoGuard } from '../../servicios_guards/acceso-pedido.guard';
 import {guardv17Guard} from '../../servicios_guards/guardv17.guard';
+import { PedidoFinalizadoComponent } from '../../componentes/zonaTienda/pedidoFinalizadoComponent/pedido-finalizado.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
     children:[
       { path: 'Libros/:idcat', component: LibrosComponent },
       { path: 'MostrarLibro/:isbn', component: DetalleslibroComponent },
-      { path: 'MostrarPedido', component: MostrarpedidoComponent, canActivate: [guardv17Guard]}
+      { path: 'MostrarPedido', component: MostrarpedidoComponent, canActivate: [guardv17Guard]},
+      { path: 'PedidoFinalizado', component: PedidoFinalizadoComponent },
     ]
   }
 ];

@@ -15,6 +15,7 @@ import { DatospagoComponent } from '../../componentes/zonaTienda/datosPagoCompon
 
 //-------------------- pipes del modulo de zona Tienda --------------------------------
 import { RedondeocantidadPipe } from '../../pipes/redondeocantidad.pipe';
+import { PedidoFinalizadoComponent } from '../../componentes/zonaTienda/pedidoFinalizadoComponent/pedido-finalizado.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { RedondeocantidadPipe } from '../../pipes/redondeocantidad.pipe';
     DatospagoComponent,
     LibrosComponent,
     DetalleslibroComponent,
-    RedondeocantidadPipe
+    RedondeocantidadPipe,
+    PedidoFinalizadoComponent
 
   ],
   imports: [

@@ -16,5 +16,6 @@ router.post('/RegistrarCliente', clienteController.registro);
 router.post('/UpdateDatosCliente', clienteController.updateDatosCliente);
 router.get('/ConfirmarCambioContraseña', clienteController.confirmarCambioContraseña);
 router.post('/OperarDireccion', clienteController.operarDireccion)
+router.get('/RecuperarDatosCliente', clienteController.recuperarDatosCliente);
 
 module.exports = router;

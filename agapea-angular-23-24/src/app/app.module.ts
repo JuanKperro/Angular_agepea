@@ -34,6 +34,7 @@ import { SubjectstorageService } from './servicios/subjectstorage.service';
 import { AuthjwtInterceptor } from './servicios_INTERCEPTORS/authjwt.interceptor';
 // interceptor en version 17 angular
 import { authjwtv17Interceptor } from './servicios_INTERCEPTORS/authjwtv17.interceptor';
+import { PedidoFinalizadoComponent } from './componentes/zonaTienda/pedidoFinalizadoComponent/pedido-finalizado.component';
 
 
 

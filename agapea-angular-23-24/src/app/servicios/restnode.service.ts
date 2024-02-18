@@ -102,12 +102,12 @@ public async LoginCliente(credenciales: {
       }
       ); 
     }
-    public FinalizarPedido( pedido:IPedido, email:string):Promise<IRestMessage>{
+    public FinalizarPedido( pedido:IPedido):Promise<IRestMessage>{
     return lastValueFrom(
                       this._httpclient
                           .post<IRestMessage>(
                             "http://localhost:3000/api/Tienda/FinalizarPedido",
-                            { pedido, email},
+                            { pedido},
                             { headers: new HttpHeaders({'Content-Type':'application/json'}) }
                           )
                     );
@@ -117,6 +117,14 @@ public async LoginCliente(credenciales: {
       this._httpclient
           .get<IRestMessage>(
             `http://localhost:3000/api/Cliente/ConfirmarCambioContraseña?email=${email}&pass=${pass}&token=${token}`
+          )
+    );
+  }
+  public RecuperarDatosCliente(token:string):Promise<IRestMessage>{
+    return lastValueFrom(
+      this._httpclient
+          .get<IRestMessage>(
+            `http://localhost:3000/api/Cliente/RecuperarDatosCliente?token=${token}`
           )
     );
   }

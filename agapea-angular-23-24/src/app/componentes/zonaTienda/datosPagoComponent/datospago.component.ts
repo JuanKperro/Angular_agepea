@@ -22,9 +22,10 @@ export class DatospagoComponent {
     if (ev.target.value === 'pagotarjeta'){
     this.mostrarDatosPago=true;
   } else {
-this.mostrarDatosPago=false;
+    this.mostrarDatosPago=false;
+
     }
-    
+    this.datosPago.controls['tipoPago'].setValue(ev.target.value);    
   }
 
 

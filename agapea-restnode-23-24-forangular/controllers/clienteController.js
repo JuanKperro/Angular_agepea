@@ -1,6 +1,8 @@
 //para inicializar firebase:  https://firebase.google.com/docs/web/setup?authuser=0&hl=es#add-sdks-initialize
 
 const { initializeApp } = require('firebase/app');
+const admin = require('firebase-admin');
+
 //OJO!! nombre variable donde se almacena la cuenta de acceso servicio firebase: FIREBASE_CONFIG (no admite cualquier nombre)
 //no meter el json aqui en fichero de codigo fuente como dice la doc...
 const app = initializeApp(JSON.parse(process.env.FIREBASE_CONFIG));
@@ -10,7 +12,7 @@ const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
     sendEmailVerification, checkActionCode, applyActionCode, sendPasswordResetEmail
     , confirmPasswordReset } = require('firebase/auth');
 
-const admin = require('firebase-admin');
+
 admin.initializeApp({
     credential: admin.credential.cert(JSON.parse(process.env.SERVICE_ACCOUNT)),
     databaseURL: 'https://ageapeaclase.firebaseio.com'
@@ -331,6 +333,20 @@ module.exports = {
             generaRespuesta(0, 'Cambio contraseña confirmado OK!!!', '', null, null, null, res);
         } catch (error) {
             generaRespuesta(1, 'Cambio contraseña con errores', error.message, null, null, null, res);
+        }
+    },
+    recuperarDatosCliente: async (req, res, next) => {
+        try {
+            const token = req.query.token;
+            const tokenprueba = await admin.auth().verifyIdToken(token);
+            const email = tokenprueba.email;
+            let _refcliente = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', email)))).docs[0];
+            let _datoscliente = _refcliente.data();
+            console.log('datos cliente recuperados...', _datoscliente);
+            generaRespuesta(0, 'Datos cliente recuperados OK!!!', '', token, _datoscliente, null, res);
+        } catch (error) {
+            console.log('error en recuperarDatosCliente...', error);
+            generaRespuesta(5, 'fallo a la hora de recuperar datos cliente', error, null, null, null, res);
         }
     }
 }
