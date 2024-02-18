@@ -3,6 +3,7 @@ import { IProvincia } from '../../../modelos/provincia';
 import { Observable } from 'rxjs';
 import { IMunicipio } from '../../../modelos/municipio';
 import { RestnodeService } from '../../../servicios/restnode.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-datosfacturacion',
@@ -11,6 +12,7 @@ import { RestnodeService } from '../../../servicios/restnode.service';
 })
 export class DatosfacturacionComponent {
   @Input()listaProvincias!:IProvincia[];
+  @Input() datosFacturacionForm!:FormGroup;
   @ViewChild('selectmunis') selectmunis!:ElementRef;
   
   public checkempresa:boolean=true;

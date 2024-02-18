@@ -4,13 +4,19 @@
     <div class="col-7">
       <app-datosenvio
         [listaProvincias]="(this.listaProvincias$ | async)!"
+        (ActualizarGastosEnvioEvent)="this.ActualizarGastosEnvio($event)"
         (checkdatosFacturacionEvent)="this.ShowCompDatosFacturacion($event)"
+        [datosEnvio]="this.datosEnvioForm"
       ></app-datosenvio>
       @if(this.showcompdatosfacturacion) {
-      <app-datosfacturacion></app-datosfacturacion>
+      <app-datosfacturacion
+        [datosFacturacionForm]="this.datosFacturacionForm"
+        [listaProvincias]="(this.listaProvincias$ | async)!"
+      ></app-datosfacturacion>
       }
 
       <app-datospago
+        [datosPago]="this.datosPagoForm"
         [tituloPago]="
           this.showcompdatosfacturacion ? '3. - Datos Pago' : '2. - Datos Pago'
         "
@@ -47,21 +53,32 @@
           <div class="col-10">
             <p><strong>Subtotal:</strong></p>
           </div>
-          <div class="col-2"><p style="color: red">0 €</p></div>
+
+          <div class="col-2">
+            <p style="color: red">{{ this.subtotalPedido$ | async }}€</p>
+          </div>
+
+          <!-- <div class="col-2"><p style="color: red"> {{ (this.listaItems$ | async)?.length === 0 ? 0 : (this.listaItems$ | async)?.reduce((acumulador,item)=>{ acumulador+ item.libroElemento.Precio })  }}</p></div>-->
         </div>
 
         <div class="row">
           <div class="col-10">
             <p><strong>Gastos de envio y Gestion:</strong></p>
           </div>
-          <div class="col-2"><p style="color: red">0 €</p></div>
+          <div class="col-2">
+            <p style="color: red">{{ this.gastosEnvio }} €</p>
+          </div>
         </div>
 
         <div class="row" style="background: #ededed">
           <div class="col-10">
             <p><strong>Total a pagar:</strong></p>
           </div>
-          <div class="col-2"><p style="color: red">0 €</p></div>
+          <div class="col-2">
+            <p style="color: red">
+              {{ (this.subtotalPedido$ | async)! + this.gastosEnvio }} €
+            </p>
+          </div>
         </div>
 
         <div class="row">
@@ -82,7 +99,7 @@
             </a>
           </div>
           <div>
-            <a class="btn btn-primary">
+            <a class="btn btn-primary" (click)="finalizarPedido()">
               <i class="fa-solid fa-truck"></i> Finalizar Pedido
             </a>
           </div>

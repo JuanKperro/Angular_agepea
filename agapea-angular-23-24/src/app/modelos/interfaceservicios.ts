@@ -8,7 +8,7 @@ export interface IStorageService {
     RecuperarDatosCliente():Observable<ICliente | null>;
     RecuperarJWT():Observable<string>;
 
-
+    VaciarElementosPedido() : void;
     OperarElementosPedido(libro:ILibro, cantidad:number, operacion:string):void
     RecuperarElementosPedido():Observable<{libroElemento:ILibro, cantidadElemento:number}[]>
     //#endregion

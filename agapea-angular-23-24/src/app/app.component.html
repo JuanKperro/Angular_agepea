@@ -27,7 +27,7 @@
                 </button>
                 } @else {
                 <button
-                  [routerLink]="['/Cliente/PanelCliente']"
+                  [routerLink]="['/Cliente/Panel/InicioPanel']"
                   routerLinkActive="router-link-active"
                   class="btn bg-negro btn-sm p-0"
                 >
@@ -75,6 +75,8 @@
                       <input
                         class="border-0 w-100 h-100"
                         type="text"
+                        appBuscarLibros
+                        (appBusqueda)="onBusqueda($event)"
                         name="cajatext"
                         placeholder="Buscar por libro, autor, ISBN..."
                       />
@@ -93,6 +95,26 @@
                       /></a>
                     </div>
                   </div>
+                  @if (this.librosBusqueda.length > 0) {
+                  <div
+                    class="bg-white border border-5 border-top-0 border-bottom-0 border-start-0 z-1"
+                    style="width: 100%"
+                  >
+                    <ul class="list-group">
+                      <li class="list-group">
+                        @for(libro of this.librosBusqueda; track libro.ISBN13){
+                        <a
+                          [routerLink]="['Tienda/MostrarLibro/', libro.ISBN13]"
+                          routerLinkActive="router-link-active"
+                          class="list-group-item list-group-item-action"
+                        >
+                          {{ libro.Titulo }}
+                        </a>
+                        }
+                      </li>
+                    </ul>
+                  </div>
+                  }
                 </div>
               </form>
             </div>
@@ -120,7 +142,12 @@
                       class="text-end"
                       id="precioCarrito"
                       style="width: 110px; font-size: 1.5em"
-                      ><strong>0,00 €</strong></span
+                      ><strong
+                        >{{
+                          (this.SubtotalPedido$ | async)?.toFixed(2)
+                        }}
+                        €</strong
+                      ></span
                     ></span
                   >
 
@@ -153,9 +180,14 @@
                      -->
     <!-- @if( this.routerEvent$ | async; as routv && ! routv.url.match(this.patron) ) -->
     @if( ! (this.routerEvent$ | async)!.url.match(this.patron) ) {
-    <!-- tengo q mostrar paneles de tienda o panel cliente-->
+    <!-- tengo q mostrar paneles de tienda o panel culiente-->
     <div class="col-3">
+      @if ( (this.routerEvent$ | async)?.url?.match(this.patronPaneles)) {
+      <app-panelcliente></app-panelcliente>
+
+      } @else{
       <app-panel-tienda></app-panel-tienda>
+      }
     </div>
 
     <div class="col-9">

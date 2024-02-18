@@ -1,20 +1,36 @@
 //para inicializar firebase:  https://firebase.google.com/docs/web/setup?authuser=0&hl=es#add-sdks-initialize
 
 const { initializeApp } = require('firebase/app');
+const admin = require('firebase-admin');
+
 //OJO!! nombre variable donde se almacena la cuenta de acceso servicio firebase: FIREBASE_CONFIG (no admite cualquier nombre)
 //no meter el json aqui en fichero de codigo fuente como dice la doc...
 const app = initializeApp(JSON.parse(process.env.FIREBASE_CONFIG));
 
 //------------ CONFIGURACION ACCESO:  FIREBASE-AUTHENTICATION -------------
-const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, checkActionCode, applyActionCode } = require('firebase/auth');
+const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    sendEmailVerification, checkActionCode, applyActionCode, sendPasswordResetEmail
+    , confirmPasswordReset } = require('firebase/auth');
+
+
+admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(process.env.SERVICE_ACCOUNT)),
+    databaseURL: 'https://ageapeaclase.firebaseio.com'
+});
+
 
 const auth = getAuth(app); //<--- servicio de acceso a firebase-authentication
 
 //------------ CONFIGURACION ACCESO:  FIREBASE-DATABASE -------------------
-const { getFirestore, getDocs, collection, where, query, addDoc, getDoc, updateDoc, doc } = require('firebase/firestore');
+const { getFirestore, getDocs, collection, where, query, addDoc,
+    getDoc, updateDoc, doc, arrayRemove, arrayUnion } = require('firebase/firestore');
 
 const db = getFirestore(app); //<---- servicio de acceso a todas las colecciones de la BD definida en firebase-database
 
+function generaRespuesta(codigo, mensaje, errores, token, datoscliente, otrosdatos, res) {
+    //if(req.body.refreshtoken) token=req.body.refreshtoken;
+    res.status(200).send({ codigo, mensaje, errores, token, datoscliente, otrosdatos });
+}
 
 
 module.exports = {
@@ -32,9 +48,10 @@ module.exports = {
             //https://firebase.google.com/docs/firestore/query-data/get-data?hl=es&authuser=0#get_multiple_documents_from_a_collection
             let _clienteSnapShot = await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.email)));
             //console.log('snapshot recuperado de clientes...', _clienteSnapShot);
-
             let _datoscliente = _clienteSnapShot.docs.shift().data();
+
             console.log('datos del clietne recuperados...', _datoscliente);
+            console.log(_clienteSnapShot.docs.shift().id);
 
             res.status(200).send(
                 {
@@ -197,5 +214,139 @@ module.exports = {
             );
         }
 
+    },
+    operarDireccion: async (req, res, next) => {
+        console.log(req.body); //{ direccion:..., operacion: ..., email: ...}
+        try {
+            //recupero de la coleccion clientes el documento con ese email, lanzo query:
+            let _refcliente = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.email)))).docs[0];
+            console.log('cliente recuperado de firebase-database...', _refcliente.data());
+
+            switch (req.body.operacion) {
+                case 'borrar':
+                    //tengo elimiinar del array de direcciones del objeto cliente recuperado la direccion q nos pasan: arrayRemove
+                    await updateDoc(_refcliente.ref, { 'direcciones': arrayRemove(req.body.direccion) });
+                    break;
+
+                case 'crear':
+                    //tengo q añadir al array de direcciones del objeto cliente recuperado la nueva direccion:  arrayUnion
+                    await updateDoc(_refcliente.ref, { 'direcciones': arrayUnion(req.body.direccion) });
+                    break;
+
+                case 'fin-modificacion':
+                    //dos posibilidades: accedes a direccion, la recuperas y vas modificandop prop.por prop o eliminas y añades
+                    let _direcciones = _refcliente.data().direcciones;
+                    let _posmodif = _direcciones.findIndex(direc => direc.idDireccion == req.body.direccion.idDireccion);
+                    _direcciones[_posmodif] = req.body.direccion;
+
+                    await updateDoc(_refcliente.ref, { 'direcciones': _direcciones });
+                    break;
+            }
+
+            //OJO!!! si usas la ref.al documento cliente de arriba, es un snapshot...no esta actualizada!!!! a las nuevas
+            //direcciones, tienes q volver a hacer query...esto no vale:
+            //let _clienteActualizado=(await getDoc(doc(db,'clientes',_refcliente.id))).data();
+            let _clienteActualizado = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.email)))).docs[0].data();
+
+            console.log('cliente actualizado mandado en el restmessage....', _clienteActualizado);
+
+            generaRespuesta(0, `${req.body.operacion} sobre direccion realizada OK!!`, null, '', _clienteActualizado, '', res);
+
+        } catch (error) {
+            console.log('error en operar direcciones...', error);
+            generaRespuesta(6, `fallo a la hora de ${req.body.operacion} sobre direccion ${req.body.direccion.calle} al guardar en bd...`, error, null, null, null, res);
+        }
+    },
+    uploadImagen: async (req, res, next) => {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            if (!token) {
+                throw new Error('no hay token en cabecera');
+            }
+            const tokenprueba = await admin.auth().verifyIdToken(token);
+            if (!tokenprueba) {
+                throw new Error('token no valido');
+            }
+            //tengo q coger la extension del fichero, en req.body.imagen:  data:image/jpeg
+            let _nombrefichero = 'imagen____' + req.body.emailcliente;//  + '.' + req.body.imagen.split(';')[0].split('/')[1]   ;
+            console.log('nombre del fichero a guardar en STORGE...', _nombrefichero);
+            let _result = await uploadString(ref(storage, `imagenes/${_nombrefichero}`), req.body.imagen, 'data_url'); //objeto respuesta subida UploadResult         
+
+            //podrias meter en coleccion clientes de firebase-database en prop. credenciales en prop. imagenAvatar
+            //el nombre del fichero y en imagenAvatarBASE&$ el contenido de la imagen...
+            let _refcliente = await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', req.body.emailcliente)));
+            _refcliente.forEach(async (result) => {
+                await updateDoc(result.ref, { 'cuenta.imagenAvatarBASE64': req.body.imagen });
+            });
+
+            generaRespuesta(0, 'Imagen avatar subida OK!!! al storage de firebase', '', null, null, null, res);
+        } catch (error) {
+            console.log('error subida imagen...', error);
+            generaRespuesta(5, 'fallo a la hora de subir imagen al storage', error, null, null, null, res);
+
+        }
+    },
+    updateDatosCliente: async (req, res, next) => {
+        try {
+            const token = req.headers.authorization.split(' ')[1];
+            if (!token) {
+                throw new Error('no hay token en cabecera');
+            }
+            const tokenprueba = await admin.auth().verifyIdToken(token);
+            const idcliente = tokenprueba.uid;
+            const email = tokenprueba.email;
+            let { datoscliente, password } = req.body;
+            let _refcliente = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', email)))).docs[0];
+            const datosactualizados = await updateDoc(_refcliente.ref, datoscliente);
+            console.log('datos actualizados en firebase...', datosactualizados);
+            //Si la password no esta vacia, enviamos email de cambio de contraseña
+            if (password.length > 0) {
+                const actionCodeSettings = {
+                    url: `http://localhost:4200/Cliente/CambioContraseñaOk?email=${email}&pass=${password}`,
+                    iOS: {
+                        bundleId: 'com.example.ios'
+                    },
+                    android: {
+                        packageName: 'com.example.android',
+                        installApp: true,
+                        minimumVersion: '12'
+                    },
+                    handleCodeInApp: true
+                };
+                await sendPasswordResetEmail(auth, email, actionCodeSettings);
+                generaRespuesta(1, 'Datos cliente actualizados OK!!!', '', token, datosactualizados, null, res);
+
+            }
+            generaRespuesta(0, 'Datos cliente actualizados OK!!!', '', token, datosactualizados, null, res);
+
+        } catch (error) {
+            console.log('error en UpdateDatosCliente...', error);
+            generaRespuesta(5, 'fallo a la hora de actualizar datos', error, null, null, null, res);
+        }
+
+    },
+    confirmarCambioContraseña: async (req, res, next) => {
+        try {
+            const { email, token, pass } = req.query;
+            const resp = await confirmPasswordReset(auth, token, pass);
+            console.log('respuesta de confirmacion cambio contraseña...', resp);
+            generaRespuesta(0, 'Cambio contraseña confirmado OK!!!', '', null, null, null, res);
+        } catch (error) {
+            generaRespuesta(1, 'Cambio contraseña con errores', error.message, null, null, null, res);
+        }
+    },
+    recuperarDatosCliente: async (req, res, next) => {
+        try {
+            const token = req.query.token;
+            const tokenprueba = await admin.auth().verifyIdToken(token);
+            const email = tokenprueba.email;
+            let _refcliente = (await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', email)))).docs[0];
+            let _datoscliente = _refcliente.data();
+            console.log('datos cliente recuperados...', _datoscliente);
+            generaRespuesta(0, 'Datos cliente recuperados OK!!!', '', token, _datoscliente, null, res);
+        } catch (error) {
+            console.log('error en recuperarDatosCliente...', error);
+            generaRespuesta(5, 'fallo a la hora de recuperar datos cliente', error, null, null, null, res);
+        }
     }
 }

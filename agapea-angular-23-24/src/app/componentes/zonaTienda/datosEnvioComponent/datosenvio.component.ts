@@ -7,6 +7,7 @@ import { IDireccion } from '../../../modelos/direccion';
 import { IProvincia } from '../../../modelos/provincia';
 import { RestnodeService } from '../../../servicios/restnode.service';
 import { IMunicipio } from '../../../modelos/municipio';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-datosenvio',
@@ -16,7 +17,9 @@ import { IMunicipio } from '../../../modelos/municipio';
 export class DatosenvioComponent implements OnDestroy {
     
     @Input()listaProvincias!:IProvincia[];
+    @Input() datosEnvio!:FormGroup;
     @Output() checkdatosFacturacionEvent:EventEmitter<boolean>=new EventEmitter<boolean>();
+    @Output() ActualizarGastosEnvioEvent:EventEmitter<number>=new EventEmitter<number>();
     @ViewChild('selectmunis') selectmunis!:ElementRef;
 
     //public datosCliente$!:Observable<ICliente>;
@@ -24,6 +27,7 @@ export class DatosenvioComponent implements OnDestroy {
     public direccionprincipal:IDireccion | undefined;
     private datosClienteSubscriptor:Subscription;
     public listaMunicipios$!:Observable<IMunicipio[]>;
+    public datosFormReal = new FormGroup({});
     
 
     //----variables de tipo switch para ocultar/mostrar partes de la vista datosenvio-----
@@ -44,6 +48,7 @@ export class DatosenvioComponent implements OnDestroy {
     }
     CargarMunicipios( provSelec:string){ //<--- va: "cpro - nombre provincia"
       this.listaMunicipios$=this.restSvc.RecuperarMunicipios(provSelec.split('-')[0]);
+      this.ActualizarGastosEnvio(provSelec.split('-')[0]);
       this.render2.removeAttribute(this.selectmunis.nativeElement, 'disabled');
     }
 
@@ -57,9 +62,17 @@ export class DatosenvioComponent implements OnDestroy {
     CheckClienteLoggedEnvio(check:boolean){
       this.checkclienteloggedenvio=check;
     }
+    ActualizarGastosEnvio(codpro:string){
+       if (codpro === '35' || codpro === '38' || codpro === '51' || codpro === '52') {
+      this.ActualizarGastosEnvioEvent.emit(5);
+    } else {
+      this.ActualizarGastosEnvioEvent.emit(2);
+    }
+    }
 
     ngOnDestroy(): void {
       this.datosClienteSubscriptor.unsubscribe();
     }
+
   
 }
