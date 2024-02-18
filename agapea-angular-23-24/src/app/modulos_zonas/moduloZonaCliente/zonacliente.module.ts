@@ -17,6 +17,7 @@ import { CambioContraseniaOkComponent } from '../../componentes/zonaCliente/camb
 //-------------------- directivas del modulo princiapal de la aplicacion ---------------------------
 import { EmailfilterdomainDirective } from '../../directivas/emailfilterdomain.directive'
 import { ComprobacionexisteemailDirective } from '../../directivas/comprobacionexisteemail.directive';
+import { MisComprasComponent } from '../../componentes/zonaCliente/misComprasComponent/mis-compras.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ComprobacionexisteemailDirective } from '../../directivas/comprobacione
     ModaldireccionesComponent,
     MinidireccionComponent,
     CambioContraseniaComponent,
-    CambioContraseniaOkComponent
+    CambioContraseniaOkComponent,
+    MisComprasComponent
   ],
   imports: [
     CommonModule,

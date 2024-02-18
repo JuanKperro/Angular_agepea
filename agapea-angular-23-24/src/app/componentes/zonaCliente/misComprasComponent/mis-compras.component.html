@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="col">
+    <h2>Mis Compras</h2>
+    <div class="row">
+      <h2>Mis Compras</h2>
+      <form>
+        <select
+          formControlName="mes"
+          class="form-select"
+          id="meses m-2"
+          (change)="this.SeleccionarMes($event)"
+        >
+          <option value="0" selected>Elige mes</option>
+          @for ( mes of meses; track $index) {
+          <option [value]="mes[0]">{{ mes[1] }}</option>
+          }
+        </select>
+        <select
+          formControlName="anio"
+          class="form-select"
+          id="años m-2"
+          (change)="this.SeleccionarAnio($event)"
+        >
+          <option value="0" selected>Elige año</option>
+          @for(anio of anios; track $index) {
+
+          <option [value]="anio">{{ anio }}</option>
+          }
+        </select>
+        <button
+          type="button btn-primary"
+          class="btn btn-link btn-sm"
+          (click)="this.FiltrarPedidos()"
+        >
+          Filtrar
+        </button>
+      </form>
+    </div>
+    <div class="row">
+      @for(pedido of this.pedidos ; track pedido.idPedido){
+      <app-mini-pedido [pedido]="pedido"></app-mini-pedido>
+      <hr />
+      }
+    </div>
+  </div>
+</div>

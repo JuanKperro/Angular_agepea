@@ -31,11 +31,12 @@ import { RestnodeService } from './servicios/restnode.service';
 import { MI_TOKEN_SERVICIOSTORAGE } from './servicios/injectiontokenstorageservices';
 import { SubjectstorageService } from './servicios/subjectstorage.service';
 //---------------------- interceptor del modulo principal de la aplicacion ---------------------------
-import { AuthjwtInterceptor } from './servicios_INTERCEPTORS/authjwt.interceptor';
+
 // interceptor en version 17 angular
 import { authjwtv17Interceptor } from './servicios_INTERCEPTORS/authjwtv17.interceptor';
-import { PedidoFinalizadoComponent } from './componentes/zonaTienda/pedidoFinalizadoComponent/pedido-finalizado.component';
+
 import { BuscarLibrosDirective } from './directivas/buscar-libros.directive';
+
 
 
 
@@ -46,7 +47,7 @@ import { BuscarLibrosDirective } from './directivas/buscar-libros.directive';
     AppComponent,
     PanelTiendaComponent,
     PanelclienteComponent,
-    BuscarLibrosDirective,
+    BuscarLibrosDirective
   ],
   imports: [ //<------------ array con modulos secundiarios q tu aplicacion va a usar
     BrowserModule,
