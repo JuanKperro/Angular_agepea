@@ -21,10 +21,9 @@ export class AccesoPedidoGuard implements CanActivateChild {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     
       return  this.storageSvc.RecuperarDatosCliente().pipe(
-        last(),
+
         map( datos => datos != null ? true : this.router.createUrlTree(['/Cliente/Login']) )
           );
-   
   }
   
 }
