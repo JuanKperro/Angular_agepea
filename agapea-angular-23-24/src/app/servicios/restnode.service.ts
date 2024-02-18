@@ -129,6 +129,11 @@ public async LoginCliente(credenciales: {
     );
   }
 
+  public BuscarLibros(busqueda: string): Observable<ILibro[]> {
+    return this._httpclient.get<ILibro[]>(
+      `http://localhost:3000/api/Tienda/BuscarLibros/${busqueda}`
+    );
+  }
 
   //#endregion
 

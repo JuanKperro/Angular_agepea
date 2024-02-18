@@ -14,6 +14,7 @@ router.get('/RecuperarProvincias', tiendaController.recuperarProvincias);
 router.get('/RecuperarMunicipios', tiendaController.recuperarMunicipios);
 router.post('/FinalizarPedido', tiendaController.finalizarPedido);
 router.get('/PayPalCallBack', tiendaController.PayPalCallBack);
+router.get('/BuscarLibros/:busqueda', tiendaController.buscarLibros);
 
 
 module.exports = router;

@@ -15,19 +15,19 @@ const _clienteHttp = axios.create(
 //truco:  puedes pasar un json a prototipo URLSearchParam  y te lo convierte a ese formato
 
 module.exports = {
-    createCustomer: async (datosclientelogged) => {
+    createCustomer: async (datospedido) => {
         try {
             let _dirppal = datosclientelogged.direcciones.filter(direc => direc.esPrincipal === true)[0];
             let _customerStripeValues = new URLSearchParams(
                 {
-                    'name': datosclientelogged.nombre,
-                    'email': datosclientelogged.cuenta.email,
-                    'phone': datosclientelogged.telefono,
-                    'address[city]': _dirppal.municipio.DMUN50,
-                    'address[state]': _dirppal.provincia.PRO,
-                    'address[country]': _dirppal.pais,
-                    'address[postal_code]': _dirppal.cp.toString(),
-                    'address[line1]': _dirppal.calle
+                    'name': datospedido.datosPago.nombreEnvio,
+                    'email': datospedido.datosPago.emailEnvio,
+                    'phone': datospedido.datosPago.telefonoEnvio,
+                    'address[city]': datospedido.datosPago.direccionEnvio.municipio.DMUM50,
+                    'address[state]': datospedido.datosPago.direccionEnvio.provincia.PRO,
+                    'address[country]': datospedido.datosPago.direccionEnvio.pais,
+                    'address[postal_code]': datospedido.datosPago.direccionEnvio.cp.toString(),
+                    'address[line1]': datospedido.datosPago.direccionEnvio.calle
                 }
             ).toString();
 

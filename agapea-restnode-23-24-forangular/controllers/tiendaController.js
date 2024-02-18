@@ -168,6 +168,14 @@ module.exports = {
                 let _resp = await servicioPaypal.crearPagoPAYPAL(email, _pedidoInsert);
                 console.log('respuesta de paypal...', _resp);
                 generaRespuesta(0, _resp, null, null, null, null, res);
+            } else {
+                let _respidCustomer = await stripeservice.createCustomer(_pedidoInsert);
+                let _respidCard = await stripeservice.createCardFromCustomer(_respidCustomer);
+                let _respidCharge = await stripeservice.createCharge(_respidCustomer, _respidCard, _pedidoInsert.totalPedido, _pedidoInsert.idPedido);
+                if (_respidCard !== 'succeeded') {
+                    throw new Error('Error al finalizar el pago con tarjeta');
+                }
+                generaRespuesta(0, _resp, null, null, null, null, res);
             }
         } catch (error) {
             console.log('error al finalizar pedido...', error);
@@ -231,5 +239,27 @@ module.exports = {
                 `http://localhost:4200/Tienda/PedidoFinalizado?email=${email}&idpedido=${idpedido}`
             );
 
+    },
+    buscarLibros: async (req, res, next) => {
+        // Crear una referencia a la colección de libros
+        console.log("buscando libros con el patrón:", req.params.busqueda);
+        let busqueda = req.params.busqueda;
+        let librosRef = collection(db, "libros");
+
+        //Cogemos todos los libros de la coleccion, y después filtramos por el patrón
+        const librosSnap = await getDocs(librosRef);
+        let libros = [];
+        librosSnap.forEach((doc) => {
+            if (
+                doc.data().Titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+                doc.data().Autores.toLowerCase().includes(busqueda.toLowerCase()) ||
+                doc.data().ISBN13.toLowerCase().includes(busqueda.toLowerCase())
+            ) {
+                libros.push(doc.data());
+            }
+        });
+        res.status(200).send(libros);
     }
+
+
 }

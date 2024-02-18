@@ -75,6 +75,8 @@
                       <input
                         class="border-0 w-100 h-100"
                         type="text"
+                        appBuscarLibros
+                        (appBusqueda)="onBusqueda($event)"
                         name="cajatext"
                         placeholder="Buscar por libro, autor, ISBN..."
                       />
@@ -93,6 +95,26 @@
                       /></a>
                     </div>
                   </div>
+                  @if (this.librosBusqueda.length > 0) {
+                  <div
+                    class="bg-white border border-5 border-top-0 border-bottom-0 border-start-0 z-1"
+                    style="width: 100%"
+                  >
+                    <ul class="list-group">
+                      <li class="list-group">
+                        @for(libro of this.librosBusqueda; track libro.ISBN13){
+                        <a
+                          [routerLink]="['Tienda/MostrarLibro/', libro.ISBN13]"
+                          routerLinkActive="router-link-active"
+                          class="list-group-item list-group-item-action"
+                        >
+                          {{ libro.Titulo }}
+                        </a>
+                        }
+                      </li>
+                    </ul>
+                  </div>
+                  }
                 </div>
               </form>
             </div>

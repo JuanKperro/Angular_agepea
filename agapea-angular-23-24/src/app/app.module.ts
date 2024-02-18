@@ -35,6 +35,7 @@ import { AuthjwtInterceptor } from './servicios_INTERCEPTORS/authjwt.interceptor
 // interceptor en version 17 angular
 import { authjwtv17Interceptor } from './servicios_INTERCEPTORS/authjwtv17.interceptor';
 import { PedidoFinalizadoComponent } from './componentes/zonaTienda/pedidoFinalizadoComponent/pedido-finalizado.component';
+import { BuscarLibrosDirective } from './directivas/buscar-libros.directive';
 
 
 
@@ -45,6 +46,7 @@ import { PedidoFinalizadoComponent } from './componentes/zonaTienda/pedidoFinali
     AppComponent,
     PanelTiendaComponent,
     PanelclienteComponent,
+    BuscarLibrosDirective,
   ],
   imports: [ //<------------ array con modulos secundiarios q tu aplicacion va a usar
     BrowserModule,

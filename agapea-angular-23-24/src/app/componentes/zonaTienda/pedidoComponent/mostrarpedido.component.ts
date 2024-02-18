@@ -162,16 +162,19 @@ export class MostrarpedidoComponent {
       })  
     ).subscribe(
       async clientelog => {
-       /* _datosPago.emailEnvio=clientelog!.cuenta.email;
-        _datosPago.nombreEnvio=clientelog!.nombre;
-        _datosPago.apellidosEnvio=clientelog!.apellidos;
-        _datosPago.telefonoEnvio=clientelog!.telefono;*/
+
 
         console.log('datos a mandar a server...',{ pedido: pedido, email: clientelog!.cuenta.email});
         let _resp : IRestMessage=await this.restSvc.FinalizarPedido( pedido);
+        if (_resp.codigo == 0){
+          this.storageSvc.VaciarElementosPedido();
+          window.location.href=_resp.mensaje;
+        }else {
+          alert('Error en el servidor, no se ha podido finalizar el pedido');
+        }
 
-        console.log('url a saltar:',_resp.mensaje);
-        window.location.href=_resp.mensaje;
+        
+        
         }
     );
 

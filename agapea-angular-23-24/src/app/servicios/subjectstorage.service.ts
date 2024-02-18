@@ -66,4 +66,9 @@ private _elementosPedido: { libroElemento: ILibro, cantidadElemento:number}[] = 
       return this._jwtSubject$.asObservable();
     }
 
+    VaciarElementosPedido() : void {
+      this._elementosPedido = [];
+      this._elementosPedidoSubject$.next(this._elementosPedido);
+    }
+
 }
