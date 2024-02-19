@@ -155,14 +155,14 @@ module.exports = {
                     metodoPago: pedido.datosPago.metodoPago,
                 }
             }
-            let _resultInsertPedido = await addDoc(collection(db, 'pedidos'), _pedidoInsert);
+            //let _resultInsertPedido = await addDoc(collection(db, 'pedidos'), _pedidoInsert);
             //Añadimos el pedido directamente al cliente
             let _clienteSnapshot = await getDocs(query(collection(db, 'clientes'), where('cuenta.email', '==', email)));
             let idcliente = _clienteSnapshot.docs[0].id;
             let docRef = doc(db, 'clientes', idcliente);
             //Añadimos el pedido directamente al cliente
             let _resultInsert = await updateDoc(docRef, {
-                pedidosCliente: arrayUnion(pedido)
+                pedidos: arrayUnion(pedido)
             });
             if (_pedidoInsert.datosPago.metodoPago === 'pagopaypal') {
                 let _resp = await servicioPaypal.crearPagoPAYPAL(email, _pedidoInsert);

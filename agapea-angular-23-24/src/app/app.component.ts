@@ -32,7 +32,6 @@ export class AppComponent {
     this.routerEvent$=router
                           .events
                           .pipe(
-                                tap( ev => console.log(ev) ),
                                 map( ev => ev as RouterEvent),
                                 filter( (ev,i)=> ev instanceof NavigationStart)
                           );

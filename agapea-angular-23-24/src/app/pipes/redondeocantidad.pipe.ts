@@ -9,8 +9,6 @@ export class RedondeocantidadPipe implements PipeTransform {
 // { valor | redondeacantidad:4 }
   
 transform(value: number, numeroDecimales:number=2): number {
-    console.log('valor pasado y numero de decimales...', { value, numeroDecimales});
-    
     //si usas value.toFixed(numeroDecimales) <---- devuelve un string, no un number....
     return Math.round(value* 10**numeroDecimales)/10**numeroDecimales;
   }
